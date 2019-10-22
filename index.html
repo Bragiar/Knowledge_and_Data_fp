@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html ng-App="KRRclass" lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>My Project</title>
+
+    <link href="./css/bootstrap.min.css" rel="stylesheet">
+	<link href="./css/css-custom.css" rel="stylesheet">
+  <link href="./css/stylesheet.css" rel="stylesheet">
+
+
+  </head>
+
+  <body  ng-controller="MainCtrl">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-acl mb-5">
+	  <a class="navbar-brand" href="#">
+	      <img src="http://www.few.vu.nl/~wissen/rw_common/images/Griffioen_Boven_Engels.png" height="50" alt="">
+		  Data Integration and App Building
+	    </a>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mb-5">
+
+
+
+		  <!-- SEARCH  -->
+		 <div class="container mt-5 mb-5">
+		   <div class="row justify-content-md-center">
+		     <div class="col-md-auto">
+		       <h3>THE COCKTAIL ADVISOR</h3>
+           <button mat-button ng-click = "searchForCocktailsINGR()">Search!</button>
+		     </div>
+		   </div>
+       <div class="row">
+		     <div class="col-6">
+			   <div class="card" >
+			     <div class="card-body">
+			       <h5 class="card-title text-center">Ingredients list</h5>
+				   <!-- TODO : write the code for visualisation 1 here -->
+           <div>
+               <div>
+                 <input type="text" placeholder="Search" ng-model="userSearch">
+               </div>
+             </div>
+           <ul class ="list-group">
+              <li ng-repeat="ingredient in allIngredients | filter : userSearch" ng-click = "select_item(ingredient)" class ="list-group-item">
+                {{ingredient.name}}
+              </li>
+            </ul>
+				   <!-- TODO : add the sparql query here -->
+			     </div>
+			   </div>
+		     </div>
+
+         <div class="col-6">
+			   <div class="card" >
+			     <div class="card-body">
+			       <h5 class="card-title text-center">Selected Ingredients</h5>
+				   <!-- TODO : write the code for visualisation 1 here -->
+           <button mat-button ng-click = "clearSelectedItems()">Clear selected Ingredients</button>
+
+           <ul class ="list-group">
+              <li ng-repeat="ingredient in selectedIngredients" class ="list-group-item">
+                {{ingredient.name}}
+              </li>
+            </ul>
+				   <!-- TODO : add the sparql query here -->
+			       <p class="card-text">{{sparqlquery1}} </p>
+			     </div>
+			   </div>
+		     </div>
+       </div>
+
+		 </div> 	 <!-- end SEARCH -->
+
+
+	  	<!-- begin Question 6 -->
+		<!-- expected output :  one component taking information from the interface, a button to "fire" the command, and something (chart, text, table...) to show the results -->
+    <div class="row">
+      <div class="col-6">
+      <div class="card" >
+        <div class="card-body">
+          <h5 class="card-title text-center">Cocktails results. Click on a cocktail for more details</h5>
+        <!-- TODO : write the code for visualisation 1 here -->
+        <div>
+          </div>
+          <!-- TODO visualise result here -->
+          <ul class ="list-group">
+             <li ng-repeat="cocktail in allCocktails" ng-click = "select_cocktail(cocktail)" class ="list-group-item">
+               {{cocktail.name}}
+             </li>
+           </ul>
+        <!-- TODO : add the sparql query here -->
+        </div>
+      </div>
+      </div>
+
+      <div class="col-6">
+      <div class="card" >
+        <div class="card-body">
+          <h5 class="card-title text-center">Details</h5>
+          <img class="card-img-top" alt="Card image cap" ng-src="{{cocktailDetails.image}}">
+          <div class="card-body">
+            <p class="card-text">{{cocktailDetails.instructions}}</p>
+          </div>
+          <h6>Ingredients:</h6>
+          <ul class ="list-group">
+             <li ng-repeat="ingr in cocktailDetails.ingredients" class ="list-group-item">
+               {{ingr}}
+             </li>
+           </ul>
+        <!-- TODO : write the code for visualisation 1 here -->
+        <!-- TODO : add the sparql query here -->
+        </div>
+      </div>
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- Footer -->
+    <footer class="footer  py-3 bg-dark">
+      <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; Vu_Td-CoopLab 2018</p>
+      </div>
+    </footer>
+
+    <!-- JavaScript libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="js/angular.min.js"></script>
+
+  	<script src="js/Chart.min.js"></script>
+  	<script src="js/angular-chart.min.js"></script>
+
+  	<script src="main.js"></script>
+
+  </body>
+
+</html>

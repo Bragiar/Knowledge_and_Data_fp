@@ -1,0 +1,330 @@
+@prefix : <http://example.org/final_project#> .
+@prefix fip: <http://example.org/final_project/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://example.org/final_project> .
+
+<http://example.org/final_project> rdf:type owl:Ontology .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://example.org/final_project/category
+fip:category rdf:type owl:ObjectProperty ;
+             owl:inverseOf fip:hasCocktail ;
+             rdfs:domain fip:Cocktail ;
+             rdfs:range fip:Category .
+
+
+###  http://example.org/final_project/fitsFor
+fip:fitsFor rdf:type owl:ObjectProperty ;
+            owl:inverseOf fip:pouredIn ;
+            rdfs:domain fip:Glass ;
+            rdfs:range fip:Cocktail .
+
+
+###  http://example.org/final_project/hasCocktail
+fip:hasCocktail rdf:type owl:ObjectProperty ;
+                rdfs:domain fip:Category ;
+                rdfs:range fip:Cocktail .
+
+
+###  http://example.org/final_project/hasIngredient
+fip:hasIngredient rdf:type owl:ObjectProperty ;
+                  owl:inverseOf fip:ingredientFor ;
+                  rdfs:domain fip:Cocktail ;
+                  rdfs:range fip:Garnish ,
+                             fip:Juice ,
+                             fip:Soda ,
+                             fip:Spirit ,
+                             fip:Wine .
+
+
+###  http://example.org/final_project/ingredientFor
+fip:ingredientFor rdf:type owl:ObjectProperty ;
+                  rdfs:range fip:Cocktail .
+
+
+###  http://example.org/final_project/pictureOf
+fip:pictureOf rdf:type owl:ObjectProperty .
+
+
+###  http://example.org/final_project/pouredIn
+fip:pouredIn rdf:type owl:ObjectProperty ;
+             rdfs:domain fip:Cocktail ;
+             rdfs:range fip:Glass .
+
+
+#################################################################
+#    Data properties
+#################################################################
+
+###  http://dbpedia.org/property/prep
+<http://dbpedia.org/property/prep> rdf:type owl:DatatypeProperty .
+
+
+###  http://example.org/final_project/hasMeasurement
+fip:hasMeasurement rdf:type owl:DatatypeProperty .
+
+
+###  http://example.org/final_project/hasPicture
+fip:hasPicture rdf:type owl:DatatypeProperty .
+
+
+###  http://example.org/final_project/isAlcoholic
+fip:isAlcoholic rdf:type owl:DatatypeProperty .
+
+
+###  http://xmlns.com/foaf/0.1/name
+<http://xmlns.com/foaf/0.1/name> rdf:type owl:DatatypeProperty .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://example.org/final_project/Alcoholic_Cocktail
+fip:Alcoholic_Cocktail rdf:type owl:Class ;
+                       owl:equivalentClass [ rdf:type owl:Class ;
+                                             owl:unionOf ( fip:Spirit
+                                                           fip:Wine
+                                                           [ rdf:type owl:Restriction ;
+                                                             owl:onProperty fip:hasIngredient ;
+                                                             owl:someValuesFrom fip:Beer
+                                                           ]
+                                                         )
+                                           ] ;
+                       rdfs:subClassOf fip:Cocktail .
+
+
+###  http://example.org/final_project/Beer
+fip:Beer rdf:type owl:Class ;
+         rdfs:subClassOf fip:Beverage .
+
+
+###  http://example.org/final_project/Beverage
+fip:Beverage rdf:type owl:Class .
+
+
+###  http://example.org/final_project/Category
+fip:Category rdf:type owl:Class .
+
+
+###  http://example.org/final_project/Cocktail
+fip:Cocktail rdf:type owl:Class ;
+             rdfs:subClassOf fip:Beverage ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty fip:hasIngredient ;
+                               owl:minQualifiedCardinality "2"^^xsd:nonNegativeInteger ;
+                               owl:onClass [ rdf:type owl:Class ;
+                                             owl:unionOf ( fip:Beverage
+                                                           fip:Garnish
+                                                         )
+                                           ]
+                             ] ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty fip:category ;
+                               owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                               owl:onClass fip:Category
+                             ] ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty fip:pouredIn ;
+                               owl:maxQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                               owl:onClass fip:Glass
+                             ] .
+
+
+###  http://example.org/final_project/Cocktailglass
+fip:Cocktailglass rdf:type owl:Class ;
+                  owl:equivalentClass [ rdf:type owl:Restriction ;
+                                        owl:onProperty fip:fitsFor ;
+                                        owl:someValuesFrom fip:Cocktail
+                                      ] ;
+                  rdfs:subClassOf fip:Glass .
+
+
+###  http://example.org/final_project/Cognac
+fip:Cognac rdf:type owl:Class ;
+           rdfs:subClassOf fip:Spirit .
+
+
+###  http://example.org/final_project/Garnish
+fip:Garnish rdf:type owl:Class .
+
+
+###  http://example.org/final_project/Gin
+fip:Gin rdf:type owl:Class ;
+        rdfs:subClassOf fip:Spirit .
+
+
+###  http://example.org/final_project/Glass
+fip:Glass rdf:type owl:Class .
+
+
+###  http://example.org/final_project/Ingredient
+fip:Ingredient rdf:type owl:Class .
+
+
+###  http://example.org/final_project/Juice
+fip:Juice rdf:type owl:Class ;
+          rdfs:subClassOf fip:Beverage .
+
+
+###  http://example.org/final_project/NonAlcoholic_Cocktail
+fip:NonAlcoholic_Cocktail rdf:type owl:Class ;
+                          rdfs:subClassOf fip:Cocktail .
+
+
+###  http://example.org/final_project/Rum
+fip:Rum rdf:type owl:Class ;
+        rdfs:subClassOf fip:Spirit .
+
+
+###  http://example.org/final_project/Soda
+fip:Soda rdf:type owl:Class ;
+         rdfs:subClassOf fip:Beverage .
+
+
+###  http://example.org/final_project/Spirit
+fip:Spirit rdf:type owl:Class ;
+           rdfs:subClassOf fip:Beverage .
+
+
+###  http://example.org/final_project/Tequila
+fip:Tequila rdf:type owl:Class ;
+            rdfs:subClassOf fip:Spirit .
+
+
+###  http://example.org/final_project/Vodka
+fip:Vodka rdf:type owl:Class ;
+          rdfs:subClassOf fip:Spirit .
+
+
+###  http://example.org/final_project/Whisky
+fip:Whisky rdf:type owl:Class ;
+           rdfs:subClassOf fip:Spirit .
+
+
+###  http://example.org/final_project/Wine
+fip:Wine rdf:type owl:Class ;
+         rdfs:subClassOf fip:Beverage .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://example.org/final_project/Amaretto
+fip:Amaretto rdf:type owl:NamedIndividual ,
+                      fip:Spirit .
+
+
+###  http://example.org/final_project/Apple_Juice
+fip:Apple_Juice rdf:type owl:NamedIndividual ,
+                         fip:Juice .
+
+
+###  http://example.org/final_project/Beefeater
+fip:Beefeater rdf:type owl:NamedIndividual ,
+                       fip:Gin .
+
+
+###  http://example.org/final_project/Beer
+fip:Beer rdf:type owl:NamedIndividual ,
+                  fip:Category .
+
+
+###  http://example.org/final_project/Collins_glass
+fip:Collins_glass rdf:type owl:NamedIndividual ,
+                           fip:Cocktailglass .
+
+
+###  http://example.org/final_project/Jar
+fip:Jar rdf:type owl:NamedIndividual ,
+                 fip:Glass .
+
+
+###  http://example.org/final_project/Lemon_juice
+fip:Lemon_juice rdf:type owl:NamedIndividual ,
+                         fip:Juice .
+
+
+###  http://example.org/final_project/Malibu
+fip:Malibu rdf:type owl:NamedIndividual ,
+                    fip:Rum .
+
+
+###  http://example.org/final_project/Mint
+fip:Mint rdf:type owl:NamedIndividual ,
+                  fip:Garnish ,
+                  fip:Ingredient .
+
+
+###  http://example.org/final_project/Red_bull
+fip:Red_bull rdf:type owl:NamedIndividual ,
+                      fip:Soda .
+
+
+###  http://example.org/final_project/Smirnoff
+fip:Smirnoff rdf:type owl:NamedIndividual ,
+                      fip:Vodka .
+
+
+###  http://example.org/final_project/Soda_water
+fip:Soda_water rdf:type owl:NamedIndividual ,
+                        fip:Soda .
+
+
+###  http://example.org/final_project/Tequila
+fip:Tequila rdf:type owl:NamedIndividual ,
+                     fip:Tequila .
+
+
+###  http://example.org/final_project/Vodka
+fip:Vodka rdf:type owl:NamedIndividual ,
+                   fip:Vodka .
+
+
+###  http://example.org/final_project/White_Russian
+fip:White_Russian rdf:type owl:NamedIndividual ,
+                           fip:Alcoholic_Cocktail .
+
+
+###  http://example.org/final_project/White_rum
+fip:White_rum rdf:type owl:NamedIndividual ,
+                       fip:Rum .
+
+
+###  http://example.org/final_project/White_wine
+fip:White_wine rdf:type owl:NamedIndividual ,
+                        fip:Wine .
+
+
+###  http://example.org/final_project/cocktail
+fip:cocktail rdf:type owl:NamedIndividual ,
+                      fip:Category .
+
+
+###  http://example.org/final_project/disgusting_cocktail
+fip:disgusting_cocktail rdf:type owl:NamedIndividual ,
+                                 fip:Cocktail ;
+                        fip:hasIngredient fip:Beefeater ,
+                                          fip:Red_bull ;
+                        fip:pouredIn fip:Jar .
+
+
+###  http://example.org/final_project/milk_float_shake
+fip:milk_float_shake rdf:type owl:NamedIndividual ,
+                              fip:Category .
+
+
+###  http://example.org/final_project/shot
+fip:shot rdf:type owl:NamedIndividual ,
+                  fip:Category .
+
+
+###  Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi
