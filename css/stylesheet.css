@@ -1,4 +1,11 @@
 .list-group {
     overflow: scroll;
-    height: 500px;
+    height: 250px;
+}
+.header{
+  background-color: black;
+}
+.header, img{
+  margin: auto;
+  display: flex;
 }

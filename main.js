@@ -1,11 +1,5 @@
 angular.module('KRRclass', [ 'chart.js']).controller('MainCtrl', ['$scope','$http', mainCtrl]);
 
-items = [];
-
-
-
-
-
 function mainCtrl($scope, $http, ChartJsProvider){
 	$scope.mysparqlendpoint = "http://localhost:7200/repositories/test?query="
 
@@ -16,7 +10,7 @@ function mainCtrl($scope, $http, ChartJsProvider){
 
 	$scope.sparqlqueryGetAllIngredients = 'SELECT DISTINCT ?ingr ?name WHERE {?s <http://example.org/final_project/hasIngredient> ?ingr . ?ingr <http://xmlns.com/foaf/0.1/name> ?name .}';
 
-	$scope.ingrResults;
+
 	$scope.allIngredients = [];
 
 	console.log($scope.endpoint+encodeURI($scope.sparqlqueryGetAllIngredients).replace(/#/g, '%23'));
@@ -43,44 +37,27 @@ function mainCtrl($scope, $http, ChartJsProvider){
 
 			})
 	})
-	$scope.items = 	$scope.allIngredients;
 
-	console.log($scope.dataFruit);
-
-
-
-  $scope.dataFruit = null;
-
-  $scope.setDataFruit = function(fruit) {
-		console.log($scope.dataFruit);
-  $scope.dataFruit = fruit;
-  }
-
-	console.log($scope.allIngredients);
-	//items = $scope.allIngredients
-	//document.getElementById('myUL').appendChild(makeUL(items));
-
-
-
-	// use a third variable if you want to visualise labels
+	//  SELECTED INGREDIENTS
 	$scope.selectedIngredients = [];
 
 	$scope.select_item = function(item){
 		console.log(item)
 		$scope.selectedIngredients.push(item);
+		$scope.searchForCocktailsINGR();
 	}
 
+	// CLEAR SELECTED INGREDIENTS
 	$scope.clearSelectedItems = function(){
 		$scope.selectedIngredients = [];
 	}
 
-	$scope.searchByIngredients
 
 	$scope.cocktailsDetails = [];
 
 
 
-
+	// SEARCH FOR COCKTAILS
 	$scope.searchForCocktailsINGR = function() {
 		console.log("searching for cocktails...")
 		console.log($scope.selectedIngredients)
@@ -115,7 +92,6 @@ function mainCtrl($scope, $http, ChartJsProvider){
 							$scope.allCocktails.push(newCocktail);
 
 						});
-				//getdataaboutcocktail(data)
 			      // TODO : your code here
 		  })
 			.error(function(error ){
@@ -123,6 +99,8 @@ function mainCtrl($scope, $http, ChartJsProvider){
 			});
 		}
 
+
+		// SELECT COCKTAIL
 
 		$scope.select_cocktail = function(cocktail){
 			console.log(cocktail)
@@ -161,38 +139,4 @@ function mainCtrl($scope, $http, ChartJsProvider){
 		 			});
 			}
 
-	// ###################### Question 6
-	// Create an interaction with the triplestore by filling the following method
-	// The function needs to include : some arguments sent by the html + an http call to the sparql endpoint + a variable storing the results to be visualised
-	// use the native function encodeURI(mySparqlQuery) to encode your query as a URL
-	let allcock = []
-  $scope.fireInteraction = function(){
-		console.log('calling ')
-    $scope.result = "Here is my input: " +$scope.searchByIngredients;  // =  TODO
-
-		console.log($scope.mysparqlendpoint+encodeURI($scope.searchByIngredients).replace(/#/g, '%23'));
-    $http( {
-		 	method: "GET",
-			url : $scope.mysparqlendpoint + encodeURI($scope.searchByIngredients).replace(/#/g, '%23'), // TODO : your endpoint + your query here,
-			headers : {'Accept':'application/sparql-results+json', 'Content-Type':'application/sparql-results+json'}
-			} )
-			.success(function(data, status ) {
-				console.log('Got cocktails from database');
-        console.log(data);
-				$scope.allCocktails = []
-        allcock.push(data);
-			      // TODO : your code here
-		  })
-			.error(function(error ){
-					console.log('Failure getting cocktails from database');
-			    console.log('Error '+error);
-			});
-
-		$scope.results = "Here is my input: " +$scope.myInput+"!";  // =  TODO
-
-	};
-	//document.getElementById('myUL').appendChild(makeUL(items));
 }
-
-// Add the contents of options[0] to #foo:
-//document.getElementById('myUL').appendChild(makeUL(items));
