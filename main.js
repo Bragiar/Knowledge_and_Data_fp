@@ -41,30 +41,42 @@ function mainCtrl($scope, $http, ChartJsProvider){
 	//  SELECTED INGREDIENTS
 	$scope.selectedIngredients = [];
 
+	$scope.latestIngredient;
+
 	$scope.select_item = function(item){
 		console.log(item)
-		$scope.selectedIngredients.push(item);
-		$scope.searchForCocktailsINGR();
+		let alreadySelected = false
+		for (var i = 0; i < $scope.selectedIngredients.length; i++) {
+
+			if (item  == $scope.selectedIngredients[i]) {
+				alreadySelected = true;
+				break;
+			}
+		}
+		if (!alreadySelected) {
+			$scope.latestIngredient = item;
+			$scope.selectedIngredients.push(item);
+			$scope.searchForCocktailsINGR();
+		}
 	}
 
 	// CLEAR SELECTED INGREDIENTS
 	$scope.clearSelectedItems = function(){
 		$scope.selectedIngredients = [];
+		$scope.allCocktails = [];
 	}
 
 
 	$scope.cocktailsDetails = [];
 
-
+	$scope.allCocktails = [];
 
 	// SEARCH FOR COCKTAILS
 	$scope.searchForCocktailsINGR = function() {
 		console.log("searching for cocktails...")
 		console.log($scope.selectedIngredients)
 		query = 'SELECT ?cocktail ?name WHERE {'
-		for (var i = 0; i < $scope.selectedIngredients.length; i++) {
-			query += ' ?cocktail <http://example.org/final_project/hasIngredient> <' + $scope.selectedIngredients[i].uri + '>. ?cocktail <http://xmlns.com/foaf/0.1/name> ?name .'
-		}
+			query += ' ?cocktail <http://example.org/final_project/hasIngredient> <' + $scope.latestIngredient.uri + '>. ?cocktail <http://xmlns.com/foaf/0.1/name> ?name .'
 		query += "}"
 
 		$scope.searchByIngredients = query
@@ -72,7 +84,6 @@ function mainCtrl($scope, $http, ChartJsProvider){
 		console.log('calling ')
 
 		//Call the database
-		$scope.allCocktails = [];
 		$http( {
 		 	method: "GET",
 			url : $scope.mysparqlendpoint + encodeURI($scope.searchByIngredients), // TODO : your endpoint + your query here,
@@ -84,13 +95,23 @@ function mainCtrl($scope, $http, ChartJsProvider){
 				angular.forEach(data.results.bindings, function(val)
 						{
 							console.log(val);
+							let cocktailInDatabase = false;
+							for (var i = 0; i < $scope.allCocktails.length; i++) {
+								if(val.cocktail.value == $scope.allCocktails[i].uri){
+									$scope.allCocktails[i].matches += 1;
+									cocktailInDatabase = true;
+									break;
+								}
+							}
+							if(!cocktailInDatabase){
+								let newCocktail = new Object();
+								newCocktail.uri = val.cocktail.value;
+								newCocktail.name = val.name.value;
+								newCocktail.matches = 1;
+								console.log('adding cocktail' + val.cocktail.value)
+								$scope.allCocktails.push(newCocktail);
 
-							let newCocktail = new Object();
-							newCocktail.uri = val.cocktail.value;
-							newCocktail.name = val.name.value;
-							console.log('adding cocktail' + val.cocktail.value)
-							$scope.allCocktails.push(newCocktail);
-
+							}
 						});
 			      // TODO : your code here
 		  })

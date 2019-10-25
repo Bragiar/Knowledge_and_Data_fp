@@ -2,6 +2,12 @@
     overflow: scroll;
     height: 250px;
 }
+.list-group-item {
+  cursor: pointer;
+}
+.list-group-item:hover {
+  color: grey
+}
 .header{
   background-color: black;
 }
