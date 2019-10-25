@@ -16,6 +16,7 @@
 ###  http://example.org/final_project/category
 fip:category rdf:type owl:ObjectProperty ;
              owl:inverseOf fip:hasCocktail ;
+             rdf:type owl:FunctionalProperty ;
              rdfs:domain fip:Cocktail ;
              rdfs:range fip:Category .
 
@@ -47,10 +48,6 @@ fip:hasIngredient rdf:type owl:ObjectProperty ;
 ###  http://example.org/final_project/ingredientFor
 fip:ingredientFor rdf:type owl:ObjectProperty ;
                   rdfs:range fip:Cocktail .
-
-
-###  http://example.org/final_project/pictureOf
-fip:pictureOf rdf:type owl:ObjectProperty .
 
 
 ###  http://example.org/final_project/pouredIn
